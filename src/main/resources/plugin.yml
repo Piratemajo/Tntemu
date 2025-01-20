@@ -3,3 +3,7 @@ version: '1.1-Beta'
 main: es.tntemu.Tntemu
 api-version: '1.21'
 authors: [SrJavier]
+commands:
+  tntemu:
+    description: Comienza o detiene el juego TNTEmu.
+    usage: /tntemu <start|stop>
