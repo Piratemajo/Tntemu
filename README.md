@@ -78,11 +78,11 @@ El último jugador que quede con vida, sin haber sido alcanzado por la explosió
 
 ## Cosas Hechas
 
-**Setup de arenas**
+1. **Setup de arenas**
 Sistema de creacion de arenas atraves de un palo y seleccion de lugar de spawn.
-**Funciones Basicas**
+2. **Funciones Basicas**
 El tema de que funcione la patata(tnt) y el momento de pasarla al jugador.
-**Timer del Juego**
+3. **Timer del Juego**
 El contador basico del juego en si.
 
 ---
