@@ -45,6 +45,19 @@ public class Tntemu extends JavaPlugin implements Listener {
         arenaManager.loadArenaConfig();
         getLogger().info("TNTEmu ha sido activado.");
         this.arenaManager = new ArenaManager(this);
+
+        // Comprobación de arenas y comandos
+        if (arenaManager.getArenas().isEmpty()) {
+            getLogger().warning("No se encontraron arenas configuradas.");
+        } else {
+            getLogger().info("Arenas cargadas correctamente.");
+        }
+
+        if (getCommand("tntemu") == null) {
+            getLogger().warning("El comando tntemu no está registrado correctamente.");
+        } else {
+            getLogger().info("El comando tntemu está registrado correctamente.");
+        }
     }
 
     @Override
@@ -137,20 +150,6 @@ public class Tntemu extends JavaPlugin implements Listener {
         return arenaManager;
     }
 
-    public List<Player> getPlayersInGame() {
-        return playersInGame;
-    }
 
-    public int getTimer() {
-        return timer;
-    }
-
-    public void setTimer(int timer) {
-        this.timer = timer;
-    }
-
-    public BossBar getBossBar() {
-        return bossBar;
-    }
     
 }

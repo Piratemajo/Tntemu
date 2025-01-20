@@ -1,5 +1,5 @@
 name: Tntemu
-version: '1.1-Beta'
+version: '${version}'
 main: es.tntemu.Tntemu
 api-version: '1.21'
 authors: [SrJavier]
