@@ -76,9 +76,14 @@ El último jugador que quede con vida, sin haber sido alcanzado por la explosió
 
 ---
 
-## Contribuciones
+## Cosas Hechas
 
-¡Las contribuciones son bienvenidas! Si deseas mejorar el plugin o agregar nuevas características, siéntete libre de hacer un pull request.
+**Setup de arenas**
+Sistema de creacion de arenas atraves de un palo y seleccion de lugar de spawn.
+**Funciones Basicas**
+El tema de que funcione la patata(tnt) y el momento de pasarla al jugador.
+**Timer del Juego**
+El contador basico del juego en si.
 
 ---
 
