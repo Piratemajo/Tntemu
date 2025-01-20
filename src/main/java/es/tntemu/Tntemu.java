@@ -42,6 +42,8 @@ public class Tntemu extends JavaPlugin implements Listener {
         timer = getConfig().getInt("timer", 10);
         arenaManager = new ArenaManager(this);
         arenaManager.loadArenaConfig();
+        getLogger().info("TNTEmu ha sido activado.");
+        this.arenaManager = new ArenaManager(this);
     }
 
     @Override
@@ -121,5 +123,11 @@ public class Tntemu extends JavaPlugin implements Listener {
         if (player.equals(tntHolder)) {
             giveTNT(playersInGame.isEmpty() ? null : playersInGame.get(new Random().nextInt(playersInGame.size())));
         }
+    }
+
+    public ArenaManager getArenaManager() {
+
+        return arenaManager;
+
     }
 }

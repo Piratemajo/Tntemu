@@ -49,7 +49,7 @@ public class TNTCommand implements CommandExecutor {
             Player player = (Player) sender;
             String name = args[1];
             Location pos1 = new Location(player.getWorld(), Double.parseDouble(args[2]), Double.parseDouble(args[3]), Double.parseDouble(args[4]));
-            Location pos2 = new Location(player.getWorld(), Double.parseDouble(args[5]), Double.parseDouble(args[6]));
+            Location pos2 = new Location(player.getWorld(), Double.parseDouble(args[5]), Double.parseDouble(args[6]), 0);
             plugin.getArenaManager().addArena(name, pos1, pos2);
             sender.sendMessage(ChatColor.GREEN + "¡Arena \"" + name + "\" guardada!");
         } else if (args[0].equalsIgnoreCase("selectarena") && args.length == 2) {
