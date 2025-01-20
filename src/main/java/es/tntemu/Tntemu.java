@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import es.tntemu.Estadisticas;
+
 public class Tntemu extends JavaPlugin implements Listener {
 
     private Player tntHolder;
@@ -33,6 +35,13 @@ public class Tntemu extends JavaPlugin implements Listener {
     private ArenaManager arenaManager;
     private List<Player> playersInGame = new ArrayList<>();
     private int timer;
+    private Estadisticas estadisticas;
+    private Particulas particulas;
+    private PowerUps powerUps;
+    private List<String> musicTracks;
+    private int currentRound = 0;
+    private int totalRounds;
+    private Placeholders placeholders;
 
     @Override
     public void onEnable() {
@@ -41,10 +50,16 @@ public class Tntemu extends JavaPlugin implements Listener {
         getCommand("tntemu").setExecutor(new TNTCommand(this));
         saveDefaultConfig();
         timer = getConfig().getInt("timer", 10);
+        totalRounds = getConfig().getInt("rounds", 3);
         arenaManager = new ArenaManager(this);
         arenaManager.loadArenaConfig();
+        estadisticas = new Estadisticas(this);
+        particulas = new Particulas();
+        powerUps = new PowerUps(this);
+        musicTracks = getConfig().getStringList("music.tracks");
+        placeholders = new Placeholders(this);
+
         getLogger().info("TNTEmu ha sido activado.");
-        this.arenaManager = new ArenaManager(this);
 
         // Comprobación de arenas y comandos
         if (arenaManager.getArenas().isEmpty()) {
@@ -54,28 +69,34 @@ public class Tntemu extends JavaPlugin implements Listener {
         }
 
         if (getCommand("tntemu") == null) {
-            getLogger().warning("El comando tntemu no está registrado correctamente.");
+            getLogger().warning("El comando 'tntemu' no está registrado correctamente.");
         } else {
-            getLogger().info("El comando tntemu está registrado correctamente.");
+            getLogger().info("El comando 'tntemu' está registrado correctamente.");
         }
     }
 
     @Override
     public void onDisable() {
         getLogger().info("TNTEmu ha sido desactivado.");
-    
+        estadisticas.saveStats();
     }
 
     public void startGame(List<Player> players) {
-        // Configurar la BossBar
+        currentRound = 1;
+        startRound(players);
+    }
+
+    private void startRound(List<Player> players) {
         bossBar.setProgress(1.0);
         bossBar.setVisible(true);
-    
+
+        playersInGame.clear();
+        playersInGame.addAll(players);
+
         for (Player player : players) {
             bossBar.addPlayer(player);
         }
 
-        // Lógica del temporizador
         new BukkitRunnable() {
             int countdown = timer;
 
@@ -83,46 +104,67 @@ public class Tntemu extends JavaPlugin implements Listener {
             public void run() {
                 if (playersInGame.size() <= 1 || countdown <= 0) {
                     bossBar.setVisible(false);
-                    endGame();
+                    endRound();
                     cancel();
                     return;
                 }
 
                 double progress = (double) countdown / timer;
                 bossBar.setProgress(progress);
-                bossBar.setTitle(ChatColor.RED + "Tiempo restante: " + countdown + " segundos");
+                bossBar.setTitle(ChatColor.RED + getConfig().getString("messages.time_remaining", "Tiempo restante: ") + countdown + " segundos");
                 countdown--;
             }
         }.runTaskTimer(this, 0, 20);
+
+        giveTNT(playersInGame.get(new Random().nextInt(playersInGame.size())));
+        powerUps.spawnRandomPowerUp(playersInGame.get(0).getLocation());
+        playMusic();
     }
 
     public void giveTNT(Player player) {
         if (player == null) return;
         player.getInventory().setItem(0, new ItemStack(Material.TNT));
-        playersInGame.add(player);
         tntHolder = player;
-        Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + " tiene la Patata.");
+        Bukkit.broadcastMessage(ChatColor.GREEN + placeholders.parsePlaceholders(player, getConfig().getString("messages.tnt_holder", "{player} tiene la Patata.").replace("{player}", player.getName())));
+        particulas.generarParticulas(player);
     }
 
     public void explodePlayer(Player player) {
         if (player == null) return;
         Location loc = player.getLocation();
-        player.getWorld().createExplosion(loc, 4.0F, false, false);
+        player.getWorld().createExplosion(loc, (float) getConfig().getDouble("explosion.radius", 4.0), false, false);
         player.setGameMode(GameMode.SPECTATOR);
         playersInGame.remove(player);
-        Bukkit.broadcastMessage(ChatColor.RED + player.getName() + " ha explotado.");
+        Bukkit.broadcastMessage(ChatColor.RED + placeholders.parsePlaceholders(player, getConfig().getString("messages.player_exploded", "{player} ha explotado.").replace("{player}", player.getName())));
+        estadisticas.addDeath(player.getName());
         if (!playersInGame.isEmpty()) {
             giveTNT(playersInGame.get(new Random().nextInt(playersInGame.size())));
         }
     }
 
-    public void endGame() {
+    public void endRound() {
         if (playersInGame.size() == 1) {
             Player winner = playersInGame.get(0);
-            Bukkit.broadcastMessage(ChatColor.GREEN + winner.getName() + " ha ganado el juego.");
+            Bukkit.broadcastMessage(ChatColor.GREEN + placeholders.parsePlaceholders(winner, getConfig().getString("messages.round_winner", "{player} ha ganado la ronda.").replace("{player}", winner.getName())));
+            estadisticas.addKill(winner.getName());
         } else {
-            Bukkit.broadcastMessage(ChatColor.RED + "El juego ha terminado.");
+            Bukkit.broadcastMessage(ChatColor.RED + getConfig().getString("messages.round_over", "La ronda ha terminado."));
         }
+        playersInGame.clear();
+        tntHolder = null;
+        stopMusic();
+
+        if (currentRound < totalRounds) {
+            currentRound++;
+            Bukkit.broadcastMessage(ChatColor.YELLOW + "Comenzando la ronda " + currentRound + "...");
+            startRound(new ArrayList<>(Bukkit.getOnlinePlayers()));
+        } else {
+            endGame();
+        }
+    }
+
+    public void endGame() {
+        Bukkit.broadcastMessage(ChatColor.RED + getConfig().getString("messages.game_over", "El juego ha terminado."));
     }
 
     @EventHandler
@@ -130,11 +172,13 @@ public class Tntemu extends JavaPlugin implements Listener {
         if (event.getRightClicked() instanceof Player && event.getPlayer().equals(tntHolder)) {
             Player clicked = (Player) event.getRightClicked();
             if (playersInGame.contains(clicked)) {
-                explodePlayer(clicked);
+                giveTNT(clicked);
+                event.getPlayer().getInventory().remove(Material.TNT);
+                Bukkit.broadcastMessage(ChatColor.YELLOW + placeholders.parsePlaceholders(event.getPlayer(), getConfig().getString("messages.tnt_passed", "{player1} ha pasado la Patata a {player2}.")
+                        .replace("{player1}", event.getPlayer().getName())
+                        .replace("{player2}", clicked.getName())));
             }
-
         }
-
     }
 
     @EventHandler
@@ -150,6 +194,43 @@ public class Tntemu extends JavaPlugin implements Listener {
         return arenaManager;
     }
 
+    public List<Player> getPlayersInGame() {
+        return playersInGame;
+    }
 
-    
+    public int getTimer() {
+        return timer;
+    }
+
+    public void setTimer(int timer) {
+        this.timer = timer;
+    }
+
+    public BossBar getBossBar() {
+        return bossBar;
+    }
+
+    public Estadisticas getEstadisticas() {
+        return estadisticas;
+    }
+
+    private void playMusic() {
+        if (getConfig().getBoolean("music.enabled", true)) {
+            for (String track : musicTracks) {
+                for (Player player : playersInGame) {
+                    player.playSound(player.getLocation(), track, 1.0f, 1.0f);
+                }
+            }
+        }
+    }
+
+    private void stopMusic() {
+        if (getConfig().getBoolean("music.enabled", true)) {
+            for (String track : musicTracks) {
+                for (Player player : playersInGame) {
+                    player.stopSound(track);
+                }
+            }
+        }
+    }
 }

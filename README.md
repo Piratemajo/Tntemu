@@ -58,6 +58,12 @@ El último jugador que quede con vida, sin haber sido alcanzado por la explosió
 - **Integración de estadísticas**  
   Se pueden recopilar estadísticas del juego, como el tiempo promedio de supervivencia y los jugadores ganadores, para ofrecer un seguimiento detallado de las partidas.
 
+- **Música personalizada**  
+  Se puede configurar música personalizada para que suene durante las partidas, incluyendo soporte para múltiples pistas.
+
+- **Placeholders personalizados**  
+  Se pueden usar placeholders personalizados para mostrar estadísticas de los jugadores en hologramas o mensajes.
+
 ---
 
 ## Requisitos
@@ -79,11 +85,29 @@ El último jugador que quede con vida, sin haber sido alcanzado por la explosió
 ## Cosas Hechas
 
 1. **Setup de arenas**
-Sistema de creacion de arenas atraves de un palo y seleccion de lugar de spawn.
-2. **Funciones Basicas**
-El tema de que funcione la patata(tnt) y el momento de pasarla al jugador.
+   - Sistema de creación de arenas a través de un palo para seleccionar las esquinas y el punto de reaparición.
+   - Añadido comando `/tntemu setup <nombre>` para configurar arenas.
+   - Añadido comando `/tntemu select <nombre>` para seleccionar una arena.
+   - Añadido comando `/tntemu list` para listar las arenas disponibles.
+
+2. **Funciones Básicas**
+   - Implementación de la mecánica de la patata caliente (TNT).
+   - Añadido método `giveTNT(Player player)` para dar la TNT a un jugador.
+   - Añadido método `explodePlayer(Player player)` para manejar la explosión de un jugador.
+   - Añadido método `generarParticulas(Player jugador)` para generar partículas al pasar la TNT.
+
 3. **Timer del Juego**
-El contador basico del juego en si.
+   - Implementación del temporizador del juego con BossBar.
+   - Añadido método `startGame(List<Player> players)` para iniciar el juego.
+   - Añadido método `endGame()` para finalizar el juego.
+
+4. **Menú de Administración**
+   - Añadido menú de administración para manejar el plugin.
+   - Añadido comando `/tntemu menu admin` para abrir el menú de administración.
+   - Implementación de eventos para manejar clics en el menú de administración.
+
+5. **Placeholders Personalizados**
+   - Añadido soporte para placeholders personalizados para mostrar estadísticas de los jugadores.
 
 ---
 

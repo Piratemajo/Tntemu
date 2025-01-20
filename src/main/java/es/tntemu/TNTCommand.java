@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -20,11 +21,11 @@ import java.util.stream.Collectors;
 public class TNTCommand implements CommandExecutor {
 
     private final Tntemu plugin;
-
-
+    private final Menus menus;
 
     public TNTCommand(Tntemu plugin) {
         this.plugin = plugin;
+        this.menus = new Menus(plugin);
     }
 
     @Override
@@ -34,8 +35,10 @@ public class TNTCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length == 0 || (!args[0].equalsIgnoreCase("start") && !args[0].equalsIgnoreCase("stop"))) {
-            sender.sendMessage(Component.text("Uso: /tntemu <start|stop>", TextColor.color(0xFF0000)));
+        Player player = (Player) sender;
+
+        if (args.length == 0 || (!args[0].equalsIgnoreCase("start") && !args[0].equalsIgnoreCase("stop") && !args[0].equalsIgnoreCase("menu") && !args[0].equalsIgnoreCase("setup"))) {
+            sender.sendMessage(Component.text("Uso: /tntemu <start|stop|menu|setup>", TextColor.color(0xFF0000)));
             return true;
         }
 
@@ -50,15 +53,13 @@ public class TNTCommand implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("stop")) {
             plugin.endGame();
             sender.sendMessage(Component.text("¡El juego ha terminado!", TextColor.color(0xd2691e)));
-        }
-
-        if (args[0].equalsIgnoreCase("setup")&& args.length == 8) {
-            Player player  = (Player) sender;
+        } else if (args[0].equalsIgnoreCase("menu") && args.length == 2 && args[1].equalsIgnoreCase("admin")) {
+            Inventory adminMenu = menus.crearMenuAdmin();
+            player.openInventory(adminMenu);
+            sender.sendMessage(Component.text("¡Menú de administración abierto!", TextColor.color(0x7fff00)));
+        } else if (args[0].equalsIgnoreCase("setup") && args.length == 2) {
             String name = args[1];
-            Location pos1 = new Location(player.getWorld(), Double.parseDouble(args[2]), Double.parseDouble(args[3]), Double.parseDouble(args[4]));
-            Location pos2 = new Location(player.getWorld(), Double.parseDouble(args[5]), Double.parseDouble(args[6]), Double.parseDouble(args[7]));
-            plugin.getArenaManager().addArena(name, pos1, pos2);
-            plugin.getArenaManager().selectArena(name);
+            plugin.getArenaManager().addArena(name);
             sender.sendMessage(Component.text("¡La arena ha sido creada!", TextColor.color(0x7fff00)));
         } else if (args[0].equalsIgnoreCase("select") && args.length == 2) {
             plugin.getArenaManager().selectArena(args[1]);
@@ -71,8 +72,6 @@ public class TNTCommand implements CommandExecutor {
         } else {
             sender.sendMessage(Component.text("Uso: /tntemu <start|stop|setup|select|list>", TextColor.color(0xFF0000)));
         } 
- 
-
 
         return true;
     }
