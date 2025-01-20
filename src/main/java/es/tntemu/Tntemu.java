@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -49,12 +50,14 @@ public class Tntemu extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         getLogger().info("TNTEmu ha sido desactivado.");
+    
     }
 
     public void startGame(List<Player> players) {
         // Configurar la BossBar
         bossBar.setProgress(1.0);
         bossBar.setVisible(true);
+    
         for (Player player : players) {
             bossBar.addPlayer(player);
         }
@@ -83,8 +86,9 @@ public class Tntemu extends JavaPlugin implements Listener {
     public void giveTNT(Player player) {
         if (player == null) return;
         player.getInventory().setItem(0, new ItemStack(Material.TNT));
+        playersInGame.add(player);
         tntHolder = player;
-        Bukkit.broadcastMessage(ChatColor.YELLOW + player.getName() + " tiene la TNT. ¡Cuidado!");
+        Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + " tiene la Patata.");
     }
 
     public void explodePlayer(Player player) {
@@ -112,8 +116,12 @@ public class Tntemu extends JavaPlugin implements Listener {
     public void onPlayerInteract(PlayerInteractEntityEvent event) {
         if (event.getRightClicked() instanceof Player && event.getPlayer().equals(tntHolder)) {
             Player clicked = (Player) event.getRightClicked();
-            giveTNT(clicked);
+            if (playersInGame.contains(clicked)) {
+                explodePlayer(clicked);
+            }
+
         }
+
     }
 
     @EventHandler
@@ -126,8 +134,23 @@ public class Tntemu extends JavaPlugin implements Listener {
     }
 
     public ArenaManager getArenaManager() {
-
         return arenaManager;
-
     }
+
+    public List<Player> getPlayersInGame() {
+        return playersInGame;
+    }
+
+    public int getTimer() {
+        return timer;
+    }
+
+    public void setTimer(int timer) {
+        this.timer = timer;
+    }
+
+    public BossBar getBossBar() {
+        return bossBar;
+    }
+    
 }

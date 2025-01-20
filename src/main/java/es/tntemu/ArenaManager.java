@@ -32,6 +32,7 @@ public class ArenaManager {
             return;
         }
         selectedArena = name;
+
         Bukkit.broadcastMessage("Arena seleccionada: \"" + name + "\".");
     }
 
@@ -46,10 +47,14 @@ public class ArenaManager {
     }
 
     public Location[] getSelectedArenaBounds() {
+        if (selectedArena == null) {
+            return null;
+        }
         return arenas.get(selectedArena);
     }
 
     private String serializeLocation(Location loc) {
+
         return loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ();
     }
 
@@ -60,5 +65,9 @@ public class ArenaManager {
         double y = Double.parseDouble(parts[2]);
         double z = Double.parseDouble(parts[3]);
         return new Location(world, x, y, z);
+    }
+
+    public Map<String, Location[]> getArenas() {
+        return arenas;
     }
 }
