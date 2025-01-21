@@ -115,11 +115,3 @@ El último jugador que quede con vida, sin haber sido alcanzado por la explosió
 
 Este proyecto está licenciado bajo la Licencia MIT.
 
----
-
-## Soporte para folia
-
-Este proyecto en algun momento tendra soporte para folia.
-
----
-

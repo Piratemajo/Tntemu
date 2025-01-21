@@ -1,7 +1,7 @@
 package es.tntemu;
 
 
-import org.bukkit.Bukkit;
+import org.bukkit.*;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;

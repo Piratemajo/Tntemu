@@ -31,26 +31,26 @@ public class PowerUps {
                 ItemStack powerUp = getRandomPowerUp();
                 randomLocation.getWorld().dropItemNaturally(randomLocation, powerUp);
             }
-        }.runTaskTimer(plugin, 0, 600);
+        }.runTaskTimer(plugin, 0, 600); // Spawns a power-up every 30 seconds
     }
 
     private ItemStack getRandomPowerUp() {
         Material[] powerUpMaterials = {Material.GOLDEN_APPLE, Material.FEATHER, Material.BLAZE_POWDER};
         return new ItemStack(powerUpMaterials[random.nextInt(powerUpMaterials.length)]);
     }
-// Terminar el applyPowerUp
+
     public void applyPowerUp(Player player, ItemStack powerUp) {
         switch (powerUp.getType()) {
             case GOLDEN_APPLE:
                 player.setInvulnerable(true);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> player.setInvulnerable(false), 200);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> player.setInvulnerable(false), 200); // 10 seconds of invulnerability
                 break;
             case FEATHER:
-                player.setWalkSpeed(0.5f);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> player.setWalkSpeed(0.2f), 200);
+                player.setWalkSpeed(0.5f); // Increase speed
+                Bukkit.getScheduler().runTaskLater(plugin, () -> player.setWalkSpeed(0.2f), 200); // Reset speed after 10 seconds
                 break;
             case BLAZE_POWDER:
-                player.setFireTicks(0);
+                player.setFireTicks(0); // Remove fire
                 break;
             default:
                 break;
