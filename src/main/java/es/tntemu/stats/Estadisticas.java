@@ -1,9 +1,11 @@
-package es.tntemu;
+package es.tntemu.stats;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import es.tntemu.Tntemu;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -55,7 +57,7 @@ public class Estadisticas {
         return deaths;
     }
 
-    void saveStats() {
+    public void saveStats() {
         for (String player : kills.keySet()) {
             statsConfig.set("kills." + player, kills.get(player));
         }
