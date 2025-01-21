@@ -122,7 +122,7 @@ public class Tntemu extends JavaPlugin implements Listener {
         if (player == null) return;
         player.getInventory().setItem(0, new ItemStack(Material.TNT));
         tntHolder = player;
-        Bukkit.broadcastMessage(ChatColor.GREEN + placeholders.parsePlaceholders(player, getConfig().getString("messages.tnt_holder", "{player} tiene la Patata.").replace("{player}", player.getName())));
+        Bukkit.broadcastMessage(ChatColor.GREEN + placeholders.parsePlaceholders(player, getConfig().getString("messages.tnt_holder", "{player} tiene la TNT.").replace("{player}", player.getName())));
         particulas.generarParticulas(player);
     }
 
@@ -175,7 +175,7 @@ public class Tntemu extends JavaPlugin implements Listener {
             if (playersInGame.contains(clicked)) {
                 giveTNT(clicked);
                 event.getPlayer().getInventory().remove(Material.TNT);
-                Bukkit.broadcastMessage(ChatColor.YELLOW + placeholders.parsePlaceholders(event.getPlayer(), getConfig().getString("messages.tnt_passed", "{player1} ha pasado la Patata a {player2}.")
+                Bukkit.broadcastMessage(ChatColor.YELLOW + placeholders.parsePlaceholders(event.getPlayer(), getConfig().getString("messages.tnt_passed", "{player1} ha pasado la TNT a {player2}.")
                         .replace("{player1}", event.getPlayer().getName())
                         .replace("{player2}", clicked.getName())));
             }
