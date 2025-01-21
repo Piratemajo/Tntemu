@@ -1,5 +1,6 @@
-package es.tntemu;
+package es.tntemu.config;
 
+import es.tntemu.Tntemu;
 import org.bukkit.entity.Player;
 
 public class Placeholders {

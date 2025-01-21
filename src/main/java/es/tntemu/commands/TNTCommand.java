@@ -1,11 +1,11 @@
-package es.tntemu;
+package es.tntemu.commands;
 
 /* 
  * Actualizacion de los codigos de colores a la versiones superiores de la 1.21.1
 */
+import es.tntemu.Tntemu;
+import es.tntemu.menus.Menus;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
