@@ -1,4 +1,4 @@
-package es.tntemu;
+package es.tntemu.effects;
 
 import org.bukkit.entity.Player;
 import org.bukkit.Particle;

@@ -1,5 +1,6 @@
-package es.tntemu;
+package es.tntemu.menus;
 
+import es.tntemu.Tntemu;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

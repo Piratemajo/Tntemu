@@ -1,5 +1,11 @@
 package es.tntemu;
 
+import es.tntemu.arena.ArenaManager;
+import es.tntemu.commands.TNTCommand;
+import es.tntemu.config.Placeholders;
+import es.tntemu.effects.Particulas;
+import es.tntemu.effects.PowerUps;
+import es.tntemu.stats.Estadisticas;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
