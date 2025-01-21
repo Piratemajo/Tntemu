@@ -2,6 +2,7 @@ package es.tntemu;
 
 /* 
  * Actualizacion de los codigos de colores a la versiones superiores de la 1.21.1
+ * Falta el punto de spawn de los jugadores en el comando select
 */
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -6,7 +6,7 @@
 
   <groupId>es</groupId>
   <artifactId>Tntemu</artifactId>
-  <version>4.0-Release</version>
+  <version>4.1-Release</version>
   <packaging>jar</packaging>
 
   <name>Tntemu</name>

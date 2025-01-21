@@ -1,7 +1,6 @@
 package es.tntemu;
 
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -10,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,8 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import es.tntemu.Estadisticas;
+;
 
 public class Tntemu extends JavaPlugin implements Listener {
 
@@ -149,6 +146,8 @@ public class Tntemu extends JavaPlugin implements Listener {
             estadisticas.addKill(winner.getName());
         } else {
             Bukkit.broadcastMessage(ChatColor.RED + getConfig().getString("messages.round_over", "La ronda ha terminado."));
+            /* TODO revisar la linea */
+            explodePlayer(playersInGame.get(new Random().nextInt(playersInGame.size())));
         }
         playersInGame.clear();
         tntHolder = null;
@@ -165,6 +164,8 @@ public class Tntemu extends JavaPlugin implements Listener {
 
     public void endGame() {
         Bukkit.broadcastMessage(ChatColor.RED + getConfig().getString("messages.game_over", "El juego ha terminado."));
+        /* TODO Revisar esta linea*/
+        stopMusic();
     }
 
     @EventHandler
