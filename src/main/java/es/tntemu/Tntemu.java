@@ -1,11 +1,6 @@
 package es.tntemu;
 
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -21,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-;
+
 
 public class Tntemu extends JavaPlugin implements Listener {
 
@@ -108,7 +103,7 @@ public class Tntemu extends JavaPlugin implements Listener {
 
                 double progress = (double) countdown / timer;
                 bossBar.setProgress(progress);
-                bossBar.setTitle(ChatColor.RED + getConfig().getString("messages.time_remaining", "Tiempo restante: ") + countdown + " segundos");
+                bossBar.setTitle(Color.RED + getConfig().getString("messages.time_remaining", "Tiempo restante: ") + countdown + " segundos");
                 countdown--;
             }
         }.runTaskTimer(this, 0, 20);
@@ -122,7 +117,7 @@ public class Tntemu extends JavaPlugin implements Listener {
         if (player == null) return;
         player.getInventory().setItem(0, new ItemStack(Material.TNT));
         tntHolder = player;
-        Bukkit.broadcastMessage(ChatColor.GREEN + placeholders.parsePlaceholders(player, getConfig().getString("messages.tnt_holder", "{player} tiene la TNT.").replace("{player}", player.getName())));
+        Bukkit.broadcastMessage(Color.GREEN + placeholders.parsePlaceholders(player, getConfig().getString("messages.tnt_holder", "{player} tiene la Patata.").replace("{player}", player.getName())));
         particulas.generarParticulas(player);
     }
 
@@ -132,7 +127,7 @@ public class Tntemu extends JavaPlugin implements Listener {
         player.getWorld().createExplosion(loc, (float) getConfig().getDouble("explosion.radius", 4.0), false, false);
         player.setGameMode(GameMode.SPECTATOR);
         playersInGame.remove(player);
-        Bukkit.broadcastMessage(ChatColor.RED + placeholders.parsePlaceholders(player, getConfig().getString("messages.player_exploded", "{player} ha explotado.").replace("{player}", player.getName())));
+        Bukkit.broadcastMessage(Color.RED + placeholders.parsePlaceholders(player, getConfig().getString("messages.player_exploded", "{player} ha explotado.").replace("{player}", player.getName())));
         estadisticas.addDeath(player.getName());
         if (!playersInGame.isEmpty()) {
             giveTNT(playersInGame.get(new Random().nextInt(playersInGame.size())));
@@ -142,12 +137,11 @@ public class Tntemu extends JavaPlugin implements Listener {
     public void endRound() {
         if (playersInGame.size() == 1) {
             Player winner = playersInGame.get(0);
-            Bukkit.broadcastMessage(ChatColor.GREEN + placeholders.parsePlaceholders(winner, getConfig().getString("messages.round_winner", "{player} ha ganado la ronda.").replace("{player}", winner.getName())));
+            Bukkit.broadcastMessage(Color.GREEN + placeholders.parsePlaceholders(winner, getConfig().getString("messages.round_winner", "{player} ha ganado la ronda.").replace("{player}", winner.getName())));
             estadisticas.addKill(winner.getName());
         } else {
-            Bukkit.broadcastMessage(ChatColor.RED + getConfig().getString("messages.round_over", "La ronda ha terminado."));
-            /* TODO revisar la linea */
-            explodePlayer(playersInGame.get(new Random().nextInt(playersInGame.size())));
+            explodePlayer(tntHolder);
+            Bukkit.broadcastMessage(Color.RED + getConfig().getString("messages.round_over", "La ronda ha terminado."));
         }
         playersInGame.clear();
         tntHolder = null;
@@ -155,7 +149,7 @@ public class Tntemu extends JavaPlugin implements Listener {
 
         if (currentRound < totalRounds) {
             currentRound++;
-            Bukkit.broadcastMessage(ChatColor.YELLOW + "Comenzando la ronda " + currentRound + "...");
+            Bukkit.broadcastMessage(Color.YELLOW + "Comenzando la ronda " + currentRound + "...");
             startRound(new ArrayList<>(Bukkit.getOnlinePlayers()));
         } else {
             endGame();
@@ -163,19 +157,18 @@ public class Tntemu extends JavaPlugin implements Listener {
     }
 
     public void endGame() {
-        Bukkit.broadcastMessage(ChatColor.RED + getConfig().getString("messages.game_over", "El juego ha terminado."));
-        /* TODO Revisar esta linea*/
-        stopMusic();
+        Bukkit.getServer().broadcastMessage(Color.RED + getConfig().getString("messages.game_over", "El juego ha terminado."));
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEntityEvent event) {
         if (event.getRightClicked() instanceof Player && event.getPlayer().equals(tntHolder)) {
             Player clicked = (Player) event.getRightClicked();
+        
             if (playersInGame.contains(clicked)) {
                 giveTNT(clicked);
                 event.getPlayer().getInventory().remove(Material.TNT);
-                Bukkit.broadcastMessage(ChatColor.YELLOW + placeholders.parsePlaceholders(event.getPlayer(), getConfig().getString("messages.tnt_passed", "{player1} ha pasado la TNT a {player2}.")
+                Bukkit.broadcastMessage(Color.YELLOW + placeholders.parsePlaceholders(event.getPlayer(), getConfig().getString("messages.tnt_passed", "{player1} ha pasado la Patata a {player2}.")
                         .replace("{player1}", event.getPlayer().getName())
                         .replace("{player2}", clicked.getName())));
             }
@@ -197,18 +190,6 @@ public class Tntemu extends JavaPlugin implements Listener {
 
     public List<Player> getPlayersInGame() {
         return playersInGame;
-    }
-
-    public int getTimer() {
-        return timer;
-    }
-
-    public void setTimer(int timer) {
-        this.timer = timer;
-    }
-
-    public BossBar getBossBar() {
-        return bossBar;
     }
 
     public Estadisticas getEstadisticas() {

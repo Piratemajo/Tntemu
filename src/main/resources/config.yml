@@ -2,7 +2,7 @@
 # Configuracion del plugin
 # Opcion del contador de tiempo
 timer: 10
-rounds: 3
+rounds: 2
 explosion:
   radius: 4.0
 
