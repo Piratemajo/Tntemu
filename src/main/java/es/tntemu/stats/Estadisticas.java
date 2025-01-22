@@ -13,7 +13,7 @@ public class Estadisticas {
 
     private final Map<String, Integer> kills = new HashMap<>();
     private final Map<String, Integer> deaths = new HashMap<>();
-    private final Tntemu plugin;
+    protected final Tntemu plugin;
     private File statsFile;
     private FileConfiguration statsConfig;
 

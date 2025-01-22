@@ -6,7 +6,6 @@ import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -113,7 +112,7 @@ public class Tntemu extends JavaPlugin implements Listener {
 
                 double progress = (double) countdown / timer;
                 bossBar.setProgress(progress);
-                bossBar.setTitle(ChatColor.RED + getConfig().getString("messages.time_remaining", "Tiempo restante: ") + countdown + " segundos");
+                bossBar.setTitle(Color.RED + getConfig().getString("messages.time_remaining", "Tiempo restante: ") + countdown + " segundos");
                 countdown--;
             }
         }.runTaskTimer(this, 0, 20);
@@ -150,11 +149,10 @@ public class Tntemu extends JavaPlugin implements Listener {
             Bukkit.broadcastMessage(Color.GREEN + placeholders.parsePlaceholders(winner, getConfig().getString("messages.round_winner", "{player} ha ganado la ronda.").replace("{player}", winner.getName())));
             estadisticas.addKill(winner.getName());
         } else {
-            explodePlayer(tntHolder);
+            explodePlayer(playersInGame.get(new Random().nextInt(playersInGame.size())));
             Bukkit.broadcastMessage(Color.RED + getConfig().getString("messages.round_over", "La ronda ha terminado."));
         }
         playersInGame.clear();
-        tntHolder = null;
         stopMusic();
 
         if (currentRound < totalRounds) {
@@ -168,6 +166,7 @@ public class Tntemu extends JavaPlugin implements Listener {
 
     public void endGame() {
         Bukkit.broadcastMessage(Color.RED + getConfig().getString("messages.game_over", "El juego ha terminado."));
+        tntHolder.getInventory().removeItem(new ItemStack(Material.TNT));
     }
 
     @EventHandler

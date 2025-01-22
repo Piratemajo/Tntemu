@@ -44,14 +44,14 @@ public class PowerUps {
         switch (powerUp.getType()) {
             case GOLDEN_APPLE:
                 player.setInvulnerable(true);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> player.setInvulnerable(false), 200); // 10 seconds of invulnerability
+                Bukkit.getScheduler().runTaskLater(plugin, () -> player.setInvulnerable(false), 200);
                 break;
             case FEATHER:
-                player.setWalkSpeed(0.5f); // Increase speed
-                Bukkit.getScheduler().runTaskLater(plugin, () -> player.setWalkSpeed(0.2f), 200); // Reset speed after 10 seconds
+                player.setWalkSpeed(0.5f);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> player.setWalkSpeed(0.2f), 200);
                 break;
             case BLAZE_POWDER:
-                player.setFireTicks(0); // Remove fire
+                player.setFireTicks(0);
                 break;
             default:
                 break;

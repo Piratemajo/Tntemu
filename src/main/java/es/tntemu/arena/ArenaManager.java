@@ -94,13 +94,13 @@ public class ArenaManager implements Listener {
         if (player.getInventory().getItemInMainHand().getType() == Material.STICK) {
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 pos1 = event.getClickedBlock().getLocation();
-                player.sendMessage(ChatColor.GREEN + "Posición 1 establecida en: " + pos1.toString());
+                player.sendMessage(Color.GREEN + "Posición 1 establecida en: " + pos1.toString());
             } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 pos2 = event.getClickedBlock().getLocation();
-                player.sendMessage(ChatColor.GREEN + "Posición 2 establecida en: " + pos2.toString());
+                player.sendMessage(Color.GREEN + "Posición 2 establecida en: " + pos2.toString());
             } else if (event.getAction() == Action.RIGHT_CLICK_AIR) {
                 spawnPoint = player.getLocation();
-                player.sendMessage(ChatColor.GREEN + "Punto de reaparición establecido en: " + spawnPoint.toString());
+                player.sendMessage(Color.GREEN + "Punto de reaparición establecido en: " + spawnPoint.toString());
             }
         }
     }

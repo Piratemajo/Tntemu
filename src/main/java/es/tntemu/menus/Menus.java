@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class Menus implements Listener {
 
-    private final Tntemu plugin;
+    protected final Tntemu plugin;
 
     public Menus(Tntemu plugin) {
         this.plugin = plugin;
