@@ -6,16 +6,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.tntemu.Tntemu;
+
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 public class Estadisticas {
 
     private final Map<String, Integer> kills = new HashMap<>();
     private final Map<String, Integer> deaths = new HashMap<>();
     protected final Tntemu plugin;
-    private File statsFile;
-    private FileConfiguration statsConfig;
+    protected File statsFile;
+    protected FileConfiguration statsConfig;
 
     public Estadisticas(Tntemu plugin) {
         this.plugin = plugin;
@@ -81,6 +84,35 @@ public class Estadisticas {
             for (String player : statsConfig.getConfigurationSection("deaths").getKeys(false)) {
                 deaths.put(player, statsConfig.getInt("deaths." + player));
             }
+        }
+    }
+
+    public void resetStats() {
+        kills.clear();
+        deaths.clear();
+        saveStats();
+    }
+
+    public void clearStats() {
+        statsFile.delete();
+        statsConfig = YamlConfiguration.loadConfiguration(statsFile);
+    }
+
+    public void reloadStats() {
+        statsConfig = YamlConfiguration.loadConfiguration(statsFile);
+        loadStats();
+    }
+
+    public void allwins() {
+        for (String player : kills.keySet()) {
+            for (String player2 : kills.keySet()) {
+                if (kills.get(player) > kills.get(player2)) {
+                    for (Player jugador : Bukkit.getOnlinePlayers()) {
+                      jugador.sendMessage(player + " tiene más kills que " + player2 + ".");
+                    }
+                }
+            }
+    
         }
     }
 }

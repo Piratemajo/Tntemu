@@ -1,8 +1,9 @@
 name: Tntemu
 version: '${version}'
+description: "Plugin Tnt Boom"
 main: es.tntemu.Tntemu
 api-version: '1.21'
-authors: [SrJavier]
+authors: [SrJavier, GatoArtStudio]
 commands:
   tntemu:
     description: Comienza o detiene el juego TNTEmu.

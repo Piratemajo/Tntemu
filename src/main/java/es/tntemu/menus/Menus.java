@@ -20,6 +20,7 @@ public class Menus implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    @SuppressWarnings("deprecation")
     public Inventory crearMenuAdmin() {
         Inventory menu = Bukkit.createInventory(null, 27, "Admin Menu");
 
@@ -44,6 +45,7 @@ public class Menus implements Listener {
         return menu;
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!event.getView().getTitle().equals("Admin Menu")) return;

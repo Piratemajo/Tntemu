@@ -1,0 +1,7 @@
+# Scoreboard para el modo de juego esta activado
+
+scoreboard:
+  title: "&cTNTEmu"
+  kills: "&aKills: &f{kills}"
+  deaths: "&cDeaths: &f{deaths}"
+  points: "&ePoints: &f{points}"

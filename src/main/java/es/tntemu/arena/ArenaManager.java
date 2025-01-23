@@ -3,16 +3,12 @@ package es.tntemu.arena;
 
 import org.bukkit.*;
 import es.tntemu.Tntemu;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.block.Action;
 import org.bukkit.entity.Player;
-import org.bukkit.Material;
-import org.bukkit.ChatColor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,24 +29,33 @@ public class ArenaManager implements Listener {
 
     public void addArena(String name) {
         if (pos1 == null || pos2 == null || spawnPoint == null) {
-            Bukkit.broadcastMessage("Debes seleccionar las dos esquinas y el punto de reaparición antes de guardar la arena.");
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendMessage("Debes seleccionar las dos esquinas y el punto de reaparición antes de guardar la arena.");
+            }
             return;
         }
+        
         arenas.put(name, new Location[]{pos1, pos2, spawnPoint});
         plugin.getConfig().set("arenas." + name + ".pos1", serializeLocation(pos1));
         plugin.getConfig().set("arenas." + name + ".pos2", serializeLocation(pos2));
         plugin.getConfig().set("arenas." + name + ".spawn", serializeLocation(spawnPoint));
         plugin.saveConfig();
-        Bukkit.broadcastMessage("Arena \"" + name + "\" guardada.");
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.sendMessage("Arena \"" + name + "\" guardada.");
+        }
     }
 
     public void selectArena(String name) {
         if (!arenas.containsKey(name)) {
-            Bukkit.broadcastMessage("La arena \"" + name + "\" no existe.");
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendMessage("La arena \"" + name + "\" no existe.");
+            }
             return;
         }
         selectedArena = name;
-        Bukkit.broadcastMessage("Arena seleccionada: \"" + name + "\".");
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.sendMessage("Arena seleccionada: \"" + name + "\".");
+        }
     }
 
     public void loadArenaConfig() {
